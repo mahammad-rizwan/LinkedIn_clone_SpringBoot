@@ -1,11 +1,31 @@
 # LinkedIn Clone — Spring Boot Microservices Scaffold
 
-This repository is a **structural scaffold**, not a finished application. Every service has its
-Maven project set up, its package structure created (`controller`, `service`, `repository`,
-`entity`, `dto`, etc.), its dependencies declared in `pom.xml`, and a placeholder
-`application.yml` — but **no business logic / Java classes have been written**. Each service's
-`README.md` tells you exactly what to build inside it, in what order, and which packages each
-class belongs in.
+This repository is a **structural scaffold**, not a finished application. It is **10
+independent Spring Boot applications** — there is no parent/reactor `pom.xml` and no unified
+build. Each service folder is a complete, standalone Maven project (its own
+`spring-boot-starter-parent`, its own runnable `@SpringBootApplication` main class) that you
+build and run **on its own**, exactly like you would any single Spring Boot app:
+
+```bash
+cd auth-service
+mvn spring-boot:run
+# or
+mvn clean package
+java -jar target/auth-service-1.0.0.jar
+```
+
+Every service has its Maven project set up, its package structure created (`controller`,
+`service`, `repository`, `entity`, `dto`, etc.), its dependencies declared in `pom.xml`, a
+runnable bootstrap class (`XxxApplication.java` — annotations only, e.g. `@EnableFeignClients`,
+`@EnableCaching`, no business logic), and a placeholder `application.yml` — but **no business
+logic has been written**. Each service's `README.md` tells you exactly what to build inside it,
+in what order, and which packages each class belongs in.
+
+> Nothing links the 10 projects together at the build level. What connects them at **runtime**
+> is Eureka (service discovery), Kafka (async events) and OpenFeign (sync calls) — see the
+> architecture diagram below. You could open each service in IntelliJ/VS Code as its own
+> separate project, or open the repo root as a workspace of 10 unrelated Maven projects — both
+> work fine, since none of them declares the others as a parent or a module.
 
 ![Architecture](docs/architecture-diagram.svg)
 
@@ -41,8 +61,9 @@ Each service folder contains:
 service-name/
 ├── README.md                     <- what to build, entities, endpoints, events
 ├── docs/service-name-diagram.svg <- internal architecture diagram
-├── pom.xml                       <- dependencies already declared
+├── pom.xml                       <- standalone Spring Boot pom (own spring-boot-starter-parent)
 └── src/main/java/com/linkedinclone/servicename/
+    ├── ServiceNameApplication.java  <- runnable main class (bootstrap only, no logic)
     ├── controller/
     ├── service/ (+ impl/)
     ├── repository/
