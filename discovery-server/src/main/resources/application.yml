@@ -1,0 +1,14 @@
+# TODO: this is a placeholder config. Adjust as needed.
+server:
+  port: 8761
+
+spring:
+  application:
+    name: discovery-server
+
+eureka:
+  client:
+    register-with-eureka: false   # the registry itself does not register with itself
+    fetch-registry: false
+  server:
+    enable-self-preservation: false   # disable in dev only; keep enabled in prod
